@@ -32,7 +32,7 @@ void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox mbd;
     mbd.setIcon(QMessageBox::Information);
-    mbd.setText(u8"\u00a9 Sharkbyteprojects \u00b6\nMIT License \u00b6");
+    mbd.setText(u8"\u00a9 Sharkbyteprojects \u00b6\nMIT License \u00b6\nGITHUB: https://github.com/Sharkbyteprojects/SharkWrite-3");
     setmessages("About \u00a9 Sharkbyteprojects", stdstatus*3);
     mbd.exec();
 }
