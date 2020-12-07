@@ -84,6 +84,7 @@ width: 100%</string>
     <addaction name="actionLoat"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
+	<addaction name="actionAutoave"/>
     <addaction name="separator"/>
     <addaction name="actionRedo"/>
     <addaction name="actionUndo"/>
@@ -125,6 +126,9 @@ width: 100%</string>
    </property>
   </action>
   <action name="actionClose_File">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>New</string>
    </property>
@@ -167,6 +171,17 @@ width: 100%</string>
   <action name="actionFileHash">
    <property name="text">
     <string>FileHash</string>
+   </property>
+  </action>
+  <action name="actionAutoave">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Autosave</string>
    </property>
   </action>
  </widget>

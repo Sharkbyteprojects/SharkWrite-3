@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     hash=gethash();
+    ui->actionAutoave->setEnabled(false);
+    ui->actionAutoave->setText("Autosave-");
     setmessages("Idle", 3);
 }
 
@@ -112,6 +114,8 @@ void MainWindow::on_actionSave_as_triggered()
 
 //SAVE HELPER FUNCTIONS
 void MainWindow::savefile(){
+    ui->actionAutoave->setEnabled(true);
+    ui->actionAutoave->setText("Autosave");
     MainWindow::setmessages("Saving File", stdstatus);
     std::ofstream dataout(filename.toStdString());
     if(dataout.fail()){
@@ -207,4 +211,12 @@ void MainWindow::on_actionFileHash_triggered()
     mbd.setInformativeText(message);
     setmessages("Open Filehash", stdstatus);
     mbd.exec();
+}
+//AUTOSAVE
+void MainWindow::on_plainTextEdit_textChanged()
+{
+    if(filename!=(QString)""&&ui->actionAutoave->isChecked()){
+        sveopt(false);
+        setmessages("Autosave", 1);
+    }
 }

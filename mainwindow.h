@@ -36,6 +36,8 @@ private slots:
 
     void on_actionFileHash_triggered();
 
+    void on_plainTextEdit_textChanged();
+
 private:
     Ui::MainWindow *ui;
     void closeEvent(QCloseEvent *bar);
