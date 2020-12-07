@@ -99,6 +99,9 @@ void MainWindow::on_actionClose_File_triggered()
     setmessages("Cleaning up the Mess!", stdstatus);
     ui->plainTextEdit->clear();
     filename="";
+    ui->actionAutoave->setEnabled(false);
+    ui->actionAutoave->setText("Autosave-");
+    ui->actionAutoave->setChecked(false);
     setmessages("Complete cleaned up", stdstatus);
 }
 
