@@ -1,0 +1,1 @@
+This version is only for windows, use [Sharkwrite 2](https://github.com/Sharkbyteprojects/SharkWrite-new) for all os
