@@ -47,34 +47,40 @@ void MainWindow::setmessages(QString text = "", int timeout=0){
 //Load
 void MainWindow::on_actionLoat_triggered()
 {
-    setmessages("Choosing File", stdstatus);
-    bool error{false};
-    QString files{openfile(error)[0]};
-    if(!error){
-        std::ifstream file(files.toStdString());
-        if(file.fail()){
-            setmessages("Can't read file", stdstatus);
-            return;
-        }
-        filename=files;
-        QString datas{""};
-        char buf[blenght];
-        setmessages("Loading File into Memory", stdstatus);
-        while(file.getline(buf, sizeof(buf))){
+    if(susa()){
+        setmessages("Choosing File", stdstatus);
+        bool error{false};
+        QString files{openfile(error)[0]};
+        if(!error){
+            std::ifstream file(files.toStdString());
             if(file.fail()){
                 setmessages("Can't read file", stdstatus);
-                break;
+                return;
             }
-            datas.append(buf);
-            datas.append(u8"\n");
+            filename=files;
+            QString datas{""};
+            char buf[blenght];
+            setmessages("Loading File into Memory", stdstatus);
+            while(file.getline(buf, sizeof(buf))){
+                if(file.fail()){
+                    setmessages("Can't read file", stdstatus);
+                    break;
+                }
+                datas.append(buf);
+                datas.append(u8"\n");
+            }
+            file.close();
+            setmessages("Loading File into Textfield", stdstatus);
+            ui->plainTextEdit->clear();
+            ui->plainTextEdit->appendPlainText(datas);
+            ui->actionAutoave->setEnabled(true);
+            ui->actionAutoave->setText("Autosave");
+            hash=gethash();
+            setmessages("Loading Complete", stdstatus);
+
+        }else{
+            setmessages("No File Selected!", stdstatus);
         }
-        file.close();
-        setmessages("Loading File into Textfield", stdstatus);
-        ui->plainTextEdit->clear();
-        ui->plainTextEdit->appendPlainText(datas);
-        setmessages("Loading Complete", stdstatus);
-    }else{
-        setmessages("No File Selected!", stdstatus);
     }
 }
 
@@ -96,13 +102,15 @@ QStringList MainWindow::openfile(bool& error){
 //NEW FILE
 void MainWindow::on_actionClose_File_triggered()
 {
-    setmessages("Cleaning up the Mess!", stdstatus);
-    ui->plainTextEdit->clear();
-    filename="";
-    ui->actionAutoave->setEnabled(false);
-    ui->actionAutoave->setText("Autosave-");
-    ui->actionAutoave->setChecked(false);
-    setmessages("Complete cleaned up", stdstatus);
+    if(susa()){
+        setmessages("Cleaning up the Mess!", stdstatus);
+        ui->plainTextEdit->clear();
+        filename="";
+        ui->actionAutoave->setEnabled(false);
+        ui->actionAutoave->setText("Autosave-");
+        ui->actionAutoave->setChecked(false);
+        setmessages("Complete cleaned up", stdstatus);
+    }
 }
 
 //SAVE (AS)
