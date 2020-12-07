@@ -1,6 +1,6 @@
 # SharkWrite 3
 
-- [WIN 32 BIT (Github Releases Upload doesn't work, thats why we published it in the repos, this link)](https://github.com/Sharkbyteprojects/SharkWrite-3/blob/master/release/32bitSharkWrite.zip) 
+- [WIN 32 BIT (Github Releases Upload doesn't work, thats why we published it in the repos, this link)](https://github.com/Sharkbyteprojects/SharkWrite-3/raw/master/release/32bitSharkWrite.zip) 
 
 ---
 
