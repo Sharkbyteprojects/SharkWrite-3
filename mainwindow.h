@@ -19,6 +19,7 @@ public:
     void savefile();
     QByteArray gethash();
     void sveopt(bool);
+    void relo();
     bool susa();
 
 private slots:
@@ -37,6 +38,10 @@ private slots:
     void on_actionFileHash_triggered();
 
     void on_plainTextEdit_textChanged();
+
+    void on_actionReload_triggered();
+
+    void on_actionOverwrite_TXT_triggered();
 
 private:
     Ui::MainWindow *ui;

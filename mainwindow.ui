@@ -32,13 +32,17 @@
    <string>SharkWrite 3 Beta</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(51, 255, 64);</string>
+   <string notr="true">/*background-color: rgb(0, 0, 0);
+color: rgb(51, 255, 64);*/</string>
   </property>
   <property name="documentMode">
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(51, 255, 64);</string>
+   </property>
    <widget class="QPlainTextEdit" name="plainTextEdit">
     <property name="geometry">
      <rect>
@@ -66,6 +70,9 @@ width: 100%</string>
    <property name="statusTip">
     <string/>
    </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -82,12 +89,15 @@ width: 100%</string>
     </property>
     <addaction name="actionClose_File"/>
     <addaction name="actionLoat"/>
+    <addaction name="actionReload"/>
+    <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
-	<addaction name="actionAutoave"/>
+    <addaction name="actionAutoave"/>
     <addaction name="separator"/>
     <addaction name="actionRedo"/>
     <addaction name="actionUndo"/>
+    <addaction name="actionOverwrite_TXT"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -182,6 +192,25 @@ width: 100%</string>
    </property>
    <property name="text">
     <string>Autosave</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="text">
+    <string>Reload</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionOverwrite_TXT">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Overwrite TXT</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+O</string>
    </property>
   </action>
  </widget>

@@ -8,6 +8,8 @@
 
 QString filename{""};
 QByteArray hash;
+QString textblocks{""};
+QString currentmsg{""};
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,7 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     hash=gethash();
     ui->actionAutoave->setEnabled(false);
-    ui->actionAutoave->setText("Autosave-");
+    ui->actionOverwrite_TXT->setChecked(ui->plainTextEdit->overwriteMode());
+    ui->actionReload->setEnabled(false);
     setmessages("Idle", 3);
 }
 
@@ -34,13 +37,17 @@ void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox mbd;
     mbd.setIcon(QMessageBox::Information);
-    mbd.setText(u8"\u00a9 Sharkbyteprojects \u00b6\nMIT License \u00b6\nGITHUB: https://github.com/Sharkbyteprojects/SharkWrite-3");
+    mbd.setText(u8"\u00a9 Sharkbyteprojects \u00b6\nMIT License \u00b6\nGITHUB: https://github.com/Sharkbyteprojects/SharkWrite-3#\u00b6");
     setmessages("About \u00a9 Sharkbyteprojects", stdstatus*3);
     mbd.exec();
 }
 void MainWindow::setmessages(QString text = "", int timeout=0){
     statusBar()->clearMessage();
-    statusBar()->showMessage(text, timeout*1000);
+    currentmsg=text;
+    QString message{text};
+    message.append(u8" \u00a6 ");
+    message.append(textblocks);
+    statusBar()->showMessage(message, timeout*1000);
 }
 /////////////////////////////////////////////////////////////////////////
 
@@ -52,32 +59,8 @@ void MainWindow::on_actionLoat_triggered()
         bool error{false};
         QString files{openfile(error)[0]};
         if(!error){
-            std::ifstream file(files.toStdString());
-            if(file.fail()){
-                setmessages("Can't read file", stdstatus);
-                return;
-            }
             filename=files;
-            QString datas{""};
-            char buf[blenght];
-            setmessages("Loading File into Memory", stdstatus);
-            while(file.getline(buf, sizeof(buf))){
-                if(file.fail()){
-                    setmessages("Can't read file", stdstatus);
-                    break;
-                }
-                datas.append(buf);
-                datas.append(u8"\n");
-            }
-            file.close();
-            setmessages("Loading File into Textfield", stdstatus);
-            ui->plainTextEdit->clear();
-            ui->plainTextEdit->appendPlainText(datas);
-            ui->actionAutoave->setEnabled(true);
-            ui->actionAutoave->setText("Autosave");
-            hash=gethash();
-            setmessages("Loading Complete", stdstatus);
-
+            on_actionReload_triggered();
         }else{
             setmessages("No File Selected!", stdstatus);
         }
@@ -107,7 +90,7 @@ void MainWindow::on_actionClose_File_triggered()
         ui->plainTextEdit->clear();
         filename="";
         ui->actionAutoave->setEnabled(false);
-        ui->actionAutoave->setText("Autosave-");
+        ui->actionReload->setEnabled(false);
         ui->actionAutoave->setChecked(false);
         setmessages("Complete cleaned up", stdstatus);
     }
@@ -126,7 +109,6 @@ void MainWindow::on_actionSave_as_triggered()
 //SAVE HELPER FUNCTIONS
 void MainWindow::savefile(){
     ui->actionAutoave->setEnabled(true);
-    ui->actionAutoave->setText("Autosave");
     MainWindow::setmessages("Saving File", stdstatus);
     std::ofstream dataout(filename.toStdString());
     if(dataout.fail()){
@@ -137,6 +119,7 @@ void MainWindow::savefile(){
     }
     dataout << (ui->plainTextEdit->toPlainText().toStdString()) << std::flush;
     hash=gethash();
+    ui->actionReload->setEnabled(true);
     dataout.close();
     MainWindow::setmessages("Written", stdstatus);
 }
@@ -211,6 +194,8 @@ void MainWindow::on_actionFileHash_triggered()
     message.append(md5.toHex());
     message.append("\nSHA 256: ");
     message.append(sha256.toHex());
+    message.append("\n------\n");
+    message.append(textblocks);
     QMessageBox mbd;
     mbd.setIcon(QMessageBox::Information);
     QString se{filename};
@@ -230,4 +215,45 @@ void MainWindow::on_plainTextEdit_textChanged()
         sveopt(false);
         setmessages("Autosave", 1);
     }
+    textblocks="Lines: ";
+    textblocks.append(QString::number(ui->plainTextEdit->blockCount()));
+    setmessages(currentmsg, stdstatus);
+}
+//Reopen
+void MainWindow::on_actionReload_triggered()
+{
+    relo();
+}
+//REOPEN and Open
+void MainWindow::relo(){
+    setmessages("Loading File", stdstatus);
+    std::ifstream file(filename.toStdString());
+    if(file.fail()){
+        setmessages("Can't read file", stdstatus);
+        return;
+    }
+    QString datas{""};
+    char buf[blenght];
+    setmessages("Loading File into Memory", stdstatus);
+    while(file.getline(buf, sizeof(buf))){
+        if(file.fail()){
+            setmessages("Can't read file", stdstatus);
+            break;
+        }
+        datas.append(buf);
+        datas.append(u8"\n");
+    }
+    file.close();
+    setmessages("Loading File into Textfield", stdstatus);
+    ui->plainTextEdit->clear();
+    ui->plainTextEdit->appendPlainText(datas);
+    ui->actionAutoave->setEnabled(true);
+    ui->actionReload->setEnabled(true);
+    hash=gethash();
+    setmessages("Loading Complete", stdstatus);
+}
+
+void MainWindow::on_actionOverwrite_TXT_triggered()
+{
+    ui->plainTextEdit->setOverwriteMode(ui->actionOverwrite_TXT->isChecked());
 }
