@@ -2,7 +2,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #endif
-#define blenght 2000
 #define stdstatus 6
 #define hashalg QCryptographicHash::Md5
 
@@ -21,13 +20,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->actionOverwrite_TXT->setChecked(ui->plainTextEdit->overwriteMode());
     ui->actionReload->setEnabled(false);
     setmessages("Idle", 3);
+    if(QCoreApplication::arguments().count() > 1){
+        setmessages("Args found, Call Open File", stdstatus);
+        filename = QCoreApplication::arguments().at(1);
+        relo();
+    }
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 QByteArray MainWindow::gethash(){
     QCryptographicHash xelem(hashalg);
     xelem.addData(ui->plainTextEdit->toPlainText().toUtf8());
@@ -233,9 +236,14 @@ void MainWindow::relo(){
         return;
     }
     QString datas{""};
-    char buf[blenght];
+    int filelenght{ui->spinBox->value()+1};
+    char * buf = (char*) malloc (filelenght);
+    if (buf==NULL||buf==nullptr){
+        setmessages("Error allocating the Buffer, try to lower the ReadSpeed", stdstatus);
+        return;
+    }
     setmessages("Loading File into Memory", stdstatus);
-    while(file.getline(buf, sizeof(buf))){
+    while(file.getline(buf, filelenght)){
         if(file.fail()){
             setmessages("Can't read file", stdstatus);
             break;
@@ -243,6 +251,7 @@ void MainWindow::relo(){
         datas.append(buf);
         datas.append(u8"\n");
     }
+    free(buf);
     file.close();
     setmessages("Loading File into Textfield", stdstatus);
     ui->plainTextEdit->clear();
